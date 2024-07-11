@@ -1,2 +1,4 @@
-package com.beyond.basic.repository;public interface MemberRepository {
+package com.beyond.basic.repository;
+
+public interface MemberRepository {
 }
