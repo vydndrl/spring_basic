@@ -22,6 +22,7 @@ public class MemberController {
 
 //    의존성 주입 (DI) 방법 1. 생성자 주입 방식 (가장 많이 사용하는 방식)
 //    장점 : 1) final 을 통해 상수로 사용 가능 2) 다형성 구현 가능 3) 순환 참조 방지
+//    생성자가 1개 밖에 없을 경우에는 Autowired 생략 가능
     private final MemberService memberService;
 
     @Autowired

@@ -1,15 +1,13 @@
 package com.beyond.basic.service;
 
-import com.beyond.basic.domain.Member;
-import com.beyond.basic.domain.MemberDetailResDto;
-import com.beyond.basic.domain.MemberReqDto;
-import com.beyond.basic.domain.MemberResDto;
+import com.beyond.basic.domain.*;
 import com.beyond.basic.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,24 +38,20 @@ private final MyMemberRepository memberRepository;
         if (dto.getPassword().length() < 8) {
             throw new IllegalArgumentException("비밀번호가 너무 짧습니다");
         }
-        Member member = new Member();
-        member.setName(dto.getName());
-        member.setPassword(dto.getPassword());
-        member.setEmail(dto.getEmail());
+        Member member = dto.toEntity();
         memberRepository.save(member);
     }
 
     public MemberDetailResDto memberDetail(Long id) {
-        MemberDetailResDto resDto = new MemberDetailResDto();
         Optional<Member> optMember = memberRepository.findById(id);
 //        클라이언트에게 적절한 예외 메시지와 상태 코드를 주는 것이 주요 목적
 //          또한, 예외를 강제 발생시킴으로서 적절한 롤백처리 하는것도 주요 목적
         Member member = optMember.orElseThrow(()->new EntityNotFoundException("없는 회원입니다."));
-        resDto.setId(member.getId());
-        resDto.setName(member.getName());
-        resDto.setEmail(member.getEmail());
-        resDto.setPassword(member.getPassword());
-        return resDto;
+        System.out.println("글쓴이의 쓴 글의 개수 : " + member.getPosts().size());
+        for (Post p : member.getPosts()) {
+            System.out.println("글의 제목 : " + p.getTitle());
+        }
+        return member.detFromEntity();
     }
 
     // memberList의 요소들을 for문으로 꺼내서 dto에 넣은 뒤 반환
@@ -65,12 +59,23 @@ private final MyMemberRepository memberRepository;
         List<MemberResDto> memberResDtos =  new ArrayList<>();
         List<Member> memberList = memberRepository.findAll();
         for (Member member : memberList) {
-            MemberResDto dto = new MemberResDto();
-            dto.setId(member.getId());
-            dto.setName(member.getName());
-            dto.setEmail(member.getEmail());
-            memberResDtos.add(dto);
+            memberResDtos.add(member.listFromEntity());
         }
         return memberResDtos;
+    }
+
+    public void pwUpdate(MemberUpdateDto dto) {
+        Member member = memberRepository.findById(dto.getId()).orElseThrow(()->new EntityNotFoundException("member is not found"));
+        member.updatePw(dto.getPassword());
+            
+//        기존 객체를 조회 후 수정한 다음에 save시에는 jpa update 실행
+        memberRepository.save(member);
+        }
+
+    public void delete(Long id) {
+        Member member = memberRepository.findById(id).orElseThrow(()->new EntityNotFoundException("member is not found"));
+        memberRepository.delete(member); // 완전 삭제
+//        member.updateDelYN("Y");
+//        member.save(member);
     }
 }
