@@ -3,6 +3,8 @@ package com.beyond.basic.controller;
 import com.beyond.basic.domain.*;
 import com.beyond.basic.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +23,30 @@ public class MemberRestController {
         this.memberService = memberService;
     }
 
+//    @GetMapping("/member/list")
+//    public List<MemberResDto> memberList() {
+//        return memberService.memberList();
+//    }
+//
     @GetMapping("/member/list")
-    public List<MemberResDto> memberList() {
-        return memberService.memberList();
+    public ResponseEntity<List<MemberResDto>> memberList() {
+        List<MemberResDto> members = memberService.memberList();
+        return new ResponseEntity<>(members, HttpStatus.CREATED);
     }
 
+//    @GetMapping("/member/detail/{id}")
+//    public MemberDetailResDto memberDetail(@PathVariable Long id) {
+//        return memberService.memberDetail(id);
+//    }
+
     @GetMapping("/member/detail/{id}")
-    public MemberDetailResDto memberDetail(@PathVariable Long id) {
+    public ResponseEntity<MemberDetailResDto> memberDetail(@PathVariable Long id) {
+        try {
+            MemberDetailResDto memberDetailResDto = memberService.memberDetail(id);
+            return new ResponseEntity<>(memberDetailResDto, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity
+        }
         return memberService.memberDetail(id);
     }
 

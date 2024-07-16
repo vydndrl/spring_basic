@@ -51,9 +51,9 @@ public class MemberJdbcRepository implements MemberRepository {
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
                 Member member = new Member();
-                member.setId(id);
-                member.setName(name);
-                member.setEmail(email);
+//                member.setId(id);
+//                member.setName(name);
+//                member.setEmail(email);
 
                 memberList.add(member);
             }
@@ -79,10 +79,10 @@ public class MemberJdbcRepository implements MemberRepository {
             String email = resultSet.getString("email");
             String password = resultSet.getString("password");
 
-            member.setId(id);
-            member.setName(name);
-            member.setEmail(email);
-            member.setPassword(password);
+//            member.setId(id);
+//            member.setName(name);
+//            member.setEmail(email);
+//            member.setPassword(password);
 
         } catch (SQLException e) {
             e.printStackTrace();
