@@ -268,4 +268,9 @@ public String axiosJsonMultiFileView() {
         System.out.println("student = " + student);
         return "ok";
     }
+    
+//    빌더 패턴 실습
+    public void helloBuilderTest() {
+        Hello hello = Hello.builder().build();
+    }
 }

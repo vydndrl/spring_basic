@@ -17,7 +17,7 @@ import java.util.List;
 //해당 클래스명으로 테이블 및 컬럼을 자동 생성하고 각종 설정 정보 위임
 @Entity
 @NoArgsConstructor // 기본 생성자는 JPA에서 필수
-public class Member {
+public class Member extends BaseEntity{
     @Id // pk 설정
 //    identity :  auto_increment 설정
 //    auto : Jpa한테 자동으로 적절한 전략을 선택하도록 맡기는 것
@@ -33,12 +33,6 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<Post> posts;
-    
-//    캐멀케이스 사용 시 DB에는 _(언더스코어)로 생성
-    @CreationTimestamp // DB에는 current_timestamp가 생성되지 않음
-    private LocalDateTime createdTime;
-    @UpdateTimestamp
-    private LocalDateTime updateTime;
 
     public Member(String name, String email, String password) {
         this.name = name;

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,12 +40,14 @@ private final MyMemberRepository memberRepository;
             throw new IllegalArgumentException("비밀번호가 너무 짧습니다");
         }
         Member member = dto.toEntity();
-        memberRepository.save(member);
-
-        // Transactional 롤백 처리 테스트
+//        // Transactional 롤백 처리 테스트
 //        if (member.getName().equals("kim")){
 //            throw new IllegalArgumentException("잘못된 입력입니다.");
 //        }
+        if(memberRepository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 Email 입니다.");
+        }
+        memberRepository.save(member);
     }
 
 
@@ -53,10 +56,10 @@ private final MyMemberRepository memberRepository;
 //        클라이언트에게 적절한 예외 메시지와 상태 코드를 주는 것이 주요 목적
 //          또한, 예외를 강제 발생시킴으로서 적절한 롤백처리 하는것도 주요 목적
         Member member = optMember.orElseThrow(()->new EntityNotFoundException("없는 회원입니다."));
-        System.out.println("글쓴이의 쓴 글의 개수 : " + member.getPosts().size());
-        for (Post p : member.getPosts()) {
-            System.out.println("글의 제목 : " + p.getTitle());
-        }
+//        System.out.println("글쓴이의 쓴 글의 개수 : " + member.getPosts().size());
+//        for (Post p : member.getPosts()) {
+//            System.out.println("글의 제목 : " + p.getTitle());
+//        }
         return member.detFromEntity();
     }
 
