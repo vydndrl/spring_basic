@@ -48,29 +48,29 @@ public class MemberRestController {
 
     @GetMapping("/member/detail/{id}")
     public ResponseEntity<Object> memberDetail(@PathVariable Long id) {
-        try {
+//        try {
             MemberDetailResDto memberDetailResDto = memberService.memberDetail(id);
             CommonResDto commonResDto = new CommonResDto(HttpStatus.OK, "member is found", memberDetailResDto);
             return new ResponseEntity<>(commonResDto, HttpStatus.OK);
-        } catch (EntityNotFoundException e) {
-            CommonErrorDto commonErrorDto = new CommonErrorDto(HttpStatus.NOT_FOUND.value(), e.getMessage());
-            return new ResponseEntity<>(commonErrorDto, HttpStatus.NOT_FOUND);
+//        } catch (EntityNotFoundException e) {
+//            CommonErrorDto commonErrorDto = new CommonErrorDto(HttpStatus.NOT_FOUND.value(), e.getMessage());
+//            return new ResponseEntity<>(commonErrorDto, HttpStatus.NOT_FOUND);
         }
-    }
+//    }
 
 
     @PostMapping("/member/create")
     public ResponseEntity<Object> memberCreatePost(@RequestBody MemberReqDto dto) {
-        try {
+//        try {
             memberService.memberCreate(dto);
             CommonResDto commonResDto = new CommonResDto(HttpStatus.CREATED, "member is successfully created", null);
             return new ResponseEntity<>(commonResDto, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            CommonErrorDto commonErrorDto = new CommonErrorDto(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-            return new ResponseEntity<>(commonErrorDto, HttpStatus.BAD_REQUEST);
+//        } catch (IllegalArgumentException e) {
+//            e.printStackTrace();
+//            CommonErrorDto commonErrorDto = new CommonErrorDto(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+//            return new ResponseEntity<>(commonErrorDto, HttpStatus.BAD_REQUEST);
         }
-    }
+//    }
 //    수정은 2가지 요청 방식 : PUT, PATCH 요청
 //    patch 요청 : 부분 수정, put 요청 : 덮어쓰기
     @PatchMapping("/member/pw/update")
